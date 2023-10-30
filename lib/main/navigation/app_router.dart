@@ -1,7 +1,6 @@
 // Packages
 import 'package:flutter/cupertino.dart';
 import 'package:products_app/feature/home/home_page.dart';
-import 'package:products_app/feature/overlay/overlay_page.dart';
 import 'package:products_app/main/navigation/route_paths.dart';
 
 // Screens
@@ -22,13 +21,6 @@ class AppRouter {
         return CupertinoPageRoute(
           builder: (context) => HomePage(),
           settings: const RouteSettings(name: RoutePaths.home),
-        );
-
-      // *** Overlay Route *** //
-      case RoutePaths.overlay:
-        return CupertinoPageRoute(
-          builder: (context) => OverlayPage(),
-          settings: const RouteSettings(name: RoutePaths.overlay),
         );
 
       default:

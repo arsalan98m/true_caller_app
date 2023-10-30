@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,7 +7,6 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:products_app/main/app_viewmodel.dart';
 import 'package:products_app/utils/color_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -74,15 +73,23 @@ void onStart(ServiceInstance service) async {
     service.stopSelf();
   });
 
-  // Timer.periodic(Duration(seconds: 1), (timer) async {
-  //   if (service is AndroidServiceInstance) {
-  //     if (await service.isForegroundService()) {
-  //       // if you don't using custom notification, uncomment this
-  //       service.setForegroundNotificationInfo(
-  //         title: "PURSHTTTAM WOOW",
-  //         content: "Updated at ${DateTime.now()}",
-  //       );
-  //     }
-  //   }
-  // });
+  Timer.periodic(const Duration(seconds: 1), (timer) async {
+    if (service is AndroidServiceInstance) {
+      if (await service.isForegroundService()) {
+        final SharedPreferences sp = await SharedPreferences.getInstance();
+        await sp.reload();
+
+        final json = sp.getString("callLogs") ?? "";
+
+        List data = json.isNotEmpty ? List<dynamic>.from(jsonDecode(json)) : [];
+
+        if (data.isNotEmpty) {
+          service.setForegroundNotificationInfo(
+            title: "True Caller",
+            content: "You have at ${data.length} Missed Calls",
+          );
+        }
+      }
+    }
+  });
 }
