@@ -80,9 +80,9 @@ class AppViewModel extends BaseViewModel {
 
   AppViewModel() {
     // *** Initially when out app started then we are Getting preserved call logs *** //
-    Future.delayed(const Duration(milliseconds: 100), () {
-      getCallLogs();
-    });
+    // Future.delayed(const Duration(milliseconds: 100), () {
+    //   getCallLogs();
+    // });
   }
 
   void startTimer() {
@@ -115,6 +115,7 @@ class AppViewModel extends BaseViewModel {
 
   // Getting CallLogs from app local storage
   void getCallLogs() async {
+    print("get call logs started");
     var _appNotifierProvider =
         ProviderScope.containerOf(appLevelKey.currentState!.context)
             .read(appNotifierProvider);

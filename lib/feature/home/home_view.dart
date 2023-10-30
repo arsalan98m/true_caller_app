@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:products_app/utils/font_size.dart';
 import 'package:sizer/sizer.dart';
@@ -28,7 +29,37 @@ class HomeView extends BasePageViewWidget<HomeViewModel> {
               fontSize: AppFontSize.f20,
               fontWeight: FontWeight.w700,
             ),
-          )
+          ),
+          ElevatedButton(
+            child: const Text("Foreground Mode"),
+            onPressed: () {
+              FlutterBackgroundService().invoke("setAsForeground");
+            },
+          ),
+          ElevatedButton(
+            child: const Text("Background Mode"),
+            onPressed: () {
+              FlutterBackgroundService().invoke("setAsBackground");
+            },
+          ),
+          ElevatedButton(
+            child: Text(model.text),
+            onPressed: () async {
+              final service = FlutterBackgroundService();
+              var isRunning = await service.isRunning();
+              if (isRunning) {
+                service.invoke("stopService");
+              } else {
+                service.startService();
+              }
+
+              if (!isRunning) {
+                model.text = 'Stop Service';
+              } else {
+                model.text = 'Start Service';
+              }
+            },
+          ),
         ],
       ),
     );
